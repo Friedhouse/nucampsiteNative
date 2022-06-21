@@ -1,13 +1,14 @@
-import { Platform, View, StyleSheet } from 'react-native';
+import { Platform, View, StyleSheet, Text, Image } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Constants from 'expo-constants';
 import { createStackNavigator } from '@react-navigation/stack';
 import CampsiteInfoScreen from './CampsiteInfoScreen';
 import DirectoryScreen from './DirectoryScreen';
 import HomeScreen from './HomeScreen';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import AboutScreen from './AboutScreen';
 import ContactScreen from './ContactScreen';
+import logo from '../assets/images/logo.png'
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -95,11 +96,6 @@ const DirectoryNavigator = () => {
                 <Stack.Screen 
                     name='Directory'
                     component={DirectoryScreen}
-                    options={{title: 'Campsite Directory'}}
-                />
-                <Stack.Screen 
-                    name='CampsiteInfo'
-                    component={CampsiteInfoScreen}
                     options={({ navigation }) => ({
                         title: 'Campsite Directory',
                         headerLeft: () => (
@@ -112,9 +108,32 @@ const DirectoryNavigator = () => {
                         )
                     })}
                 />
+                <Stack.Screen 
+                    name='CampsiteInfo'
+                    component={CampsiteInfoScreen}
+                    options={({ route }) => ({
+                        title: route.params.campsite.name
+                    })}
+                />
         </Stack.Navigator>
     )
 }
+
+const CustomDrawerContent = (props) => (
+    
+    <DrawerContentScrollView {...props}>
+        <View style={Styles.drawerHeader}>
+            <View style={{flex: 1}}>
+                <Image source={logo} style={Styles.drawerImage} />
+            </View>
+            <View style={{flex: 2}}>
+                <Text style={Styles.drawerHeaderText}>Nucamp</Text>
+            </View>
+        </View>
+        <DrawerItemList {...props} labelstyle={{ fontweight: 'bold'}} />    
+    </DrawerContentScrollView>
+)
+
 
 const Main = () => {
     return (
@@ -125,6 +144,7 @@ const Main = () => {
             <Drawer.Navigator
                 initialRouteName='Home'
                 drawerStyle={{ backgroundColor: '#CEC8FF' }}
+                drawerContent={CustomDrawerContent}
             >
                 <Drawer.Screen 
                     name='Home'
@@ -136,7 +156,7 @@ const Main = () => {
                                 name='home'
                                 type='font-awesome'
                                 size={24}
-                                iconStyle={{width: 10}}
+                                iconStyle={{width: 24}}
                                 color={color}
                             />
                         )
@@ -146,13 +166,13 @@ const Main = () => {
                     name='Directory'
                     component={DirectoryNavigator}
                     options={{
-                        title: 'Campsite Info',
+                        title: 'Campsite Directory',
                         drawerIcon: ({color}) => (
                             <Icon  
                                 name='list'
                                 type='font-awesome'
                                 size={24}
-                                iconStyle={{width: 10}}
+                                iconStyle={{width: 24}}
                                 color={color}
                             />
                         )
@@ -168,7 +188,7 @@ const Main = () => {
                                 name='info-circle'
                                 type='font-awesome'
                                 size={24}
-                                iconStyle={{width: 10}}
+                                iconStyle={{width: 24}}
                                 color={color}
                             />
                         )
@@ -184,7 +204,7 @@ const Main = () => {
                                 name='address-card'
                                 type='font-awesome'
                                 size={24}
-                                iconStyle={{width: 10}}
+                                iconStyle={{width: 24}}
                                 color={color}
                             />
                         )
@@ -200,6 +220,24 @@ const Styles = StyleSheet.create({
         marginLeft: 10,
         color: '#fff',
         fontSize: 24
+    },
+    drawerHeader: {
+        backgroundColor: '#5637DD',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row'
+    },
+    drawerHeaderText: {
+        color: '#fff',
+        fontSize: 24,
+        fontWeight: 'bold'
+    },
+    drawerImage: {
+        margin: 10,
+        height: 60,
+        width: 60
     }
 })
 
