@@ -227,7 +227,7 @@ const Main = () => {
                 />
                 <Drawer.Screen 
                     name='Favorites'
-                    component={HomeNavigator}
+                    component={FavoritesNavigator}
                     options={{
                         title: 'My Favorites',
                         drawerIcon: ({color}) => (
