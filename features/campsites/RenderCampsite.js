@@ -4,6 +4,7 @@ import { baseUrl } from '../../shared/baseUrl'
 import * as Animatable from 'react-native-animatable';
 import { useRef } from 'react';
 
+
 const RenderCampsite = (props) => {
     const { campsite } = props;
 
