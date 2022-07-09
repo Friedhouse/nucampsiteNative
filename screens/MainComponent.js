@@ -231,7 +231,11 @@ const Main = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        NetInfo.fetch().then((connectionInfo) => {
+        return showNetInfo();
+    }, []);
+
+    const showNetInfo = async () => {
+        await NetInfo.fetch().then((connectionInfo) => {
             Platform.OS === 'ios'
                 ? Alert.alert(
                     'Initial Network Connectivity Type:',
@@ -249,8 +253,8 @@ const Main = () => {
                 handleConnectivityChange(connectionInfo);
             }
         )
-        return unsubscribeNetInfo;         
-    }, []);
+        return unsubscribeNetInfo; 
+    }
 
     const handleConnectivityChange = (connectionInfo) => {
         let connectionMsg = 'You are now connected to an active network.';
