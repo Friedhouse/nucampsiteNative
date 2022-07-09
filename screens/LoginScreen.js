@@ -3,9 +3,11 @@ import { View, StyleSheet, ScrollView, Image } from 'react-native';
 import { CheckBox, Input, Button, Icon } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 import { baseUrl } from '../shared/baseUrl';
 import logo from '../assets/images/logo.png';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 
 
@@ -119,7 +121,7 @@ const RegisterTab = () => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [remember, setRemember] = useState(false);
-    const [imageUrl, setImageUrl] = useState(baseUrl + 'images/logo.png')
+    const [imageUrl, setImageUrl] = useState(baseUrl + 'images/logo.png');
 
     const handleRegister = () => {
         const userInfo =  {
@@ -151,12 +153,38 @@ const RegisterTab = () => {
 
         if (cameraPermission.status === 'granted') {
             const capturedImage = await ImagePicker.launchCameraAsync({
-                allowsEditing: 'true',
+                allowsEditing: true,
                 aspect: [1, 1]
             })
             if (!capturedImage.cancelled) {
                 console.log(capturedImage);
-                setImageUrl(capturedImage.uri);
+                processImage(capturedImage.uri)
+            }
+        }
+    }
+
+    const processImage = async (imgUri) => {
+        const processedImage = await ImageManipulator.manipulateAsync(
+            imgUri,
+            [{ resize: {width: 400} }],
+            {format: ImageManipulator.SaveFormat.PNG = "png"}
+        );
+        console.log (processedImage);
+        setImageUrl(processedImage.uri);
+        
+    }
+
+    const getImageFromGallery = async () => {
+        const mediaLibraryPermissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (mediaLibraryPermissions.status === 'granted') {
+            const capturedImage = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [1, 1]
+            })
+            if (!mediaLibraryPermissions.cancelled) {
+                console.log(capturedImage);
+                processImage(capturedImage.uri);
             }
         }
     }
@@ -172,6 +200,10 @@ const RegisterTab = () => {
                     <Button 
                         title='Camera'
                         onPress={getImageFromCamera}
+                    />
+                    <Button 
+                        title='Gallery'
+                        onPress={getImageFromGallery}
                     />
                 </View>
                 <View style={styles.container}>
