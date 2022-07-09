@@ -4,6 +4,7 @@ import { CheckBox, Input, Button, Icon } from 'react-native-elements';
 import * as SecureStore from 'expo-secure-store';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
+import * as MediaLibrary from 'expo-media-library';
 import { baseUrl } from '../shared/baseUrl';
 import logo from '../assets/images/logo.png';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
